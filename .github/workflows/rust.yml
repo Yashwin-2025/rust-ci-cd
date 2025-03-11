@@ -1,24 +1,32 @@
-name: Rust CI/CD Pipeline
+name: Rust CI/CD
 
 on:
   push:
-    branches: [main]
+    branches:
+      - main
   pull_request:
-    branches: [main]
+    branches:
+      - main
 
 jobs:
   build:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout Repository
-        uses: actions/checkout@v3
+    - name: Checkout Repository
+      uses: actions/checkout@v3
 
-      - name: Install Rust
-        uses: dtolnay/rust-toolchain@stable
+    - name: Install Rust
+      uses: dtolnay/rust-toolchain@stable
 
-      - name: Build Project
-        run: cargo build --verbose
+    - name: Build Project
+      run: cargo build --release
 
-      - name: Run Tests
-        run: cargo test --verbose
+    - name: Run Tests
+      run: cargo test
+
+    - name: Upload Binary Artifact
+      uses: actions/upload-artifact@v3
+      with:
+        name: rust-binary
+        path: target/release/myproject
